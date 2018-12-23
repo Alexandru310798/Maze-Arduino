@@ -1,0 +1,700 @@
+#include "LedControl.h" 
+LedControl lc = LedControl(12, 11, 10, 1); 
+const int SW_pin = 4; 
+const int X_pin = 5; 
+const int Y_pin = 3;
+int Matrix_1[8][8], Score = 0;
+int Matrix_2[8][8], Matrix_3[8][8];
+void setup()
+{
+    
+    lc.shutdown(0, false); 
+    lc.setIntensity(0, 15); 
+    lc.clearDisplay(0);
+    Serial.begin(9600);
+    randomSeed(analogRead(A0));
+   for( int i = 1; i <8; i++)
+        if(i % 3 == 0)
+        {
+
+            int r = random(0,8);
+            for(int j = 0; j < 8; j ++)
+                Matrix_1[i][j] = 2;
+            Matrix_1[i][r] = 1;
+        }
+
+    for(int i = 1; i < 8; i ++)
+        if(i % 2 )
+        {
+
+            int r = random(0,8);
+            for(int j = 0; j < 8; j++)
+                Matrix_2[i][j] = 2;
+
+            Matrix_2[i][r] = 1;
+        }
+
+    for( int i = 0; i < 8; i ++)
+        for( int j = 0; j < 8; j ++)
+        Matrix_3[i][j] = Matrix_2[i][j];
+}
+void Print_Score(int x)
+{
+    if(x%10 == 0)
+    {
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 4, 1, true);
+        lc.setLed(0, 4, 2, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 4, 4, true);
+        lc.setLed(0, 4, 5, true);
+        lc.setLed(0, 4, 6, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 7, true);
+    }
+
+    else   if(x % 10 == 1)
+    {
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 6, 1, true);
+        lc.setLed(0, 5, 2, true);
+    }
+    else if( x % 10 == 2)
+    {
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 5, 3, true);
+        lc.setLed(0, 6, 3, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 7, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+        lc.setLed(0, 4, 5, true);
+        lc.setLed(0, 4, 4, true);
+        lc.setLed(0, 4, 6, true);
+    }
+    else if( x % 10 == 3)
+    {
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 6, 7, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 3, true);
+        lc.setLed(0, 5, 3, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 4, 0, true);
+    }
+    else if(x % 10 == 4)
+    {
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 6, 4, true);
+        lc.setLed(0, 5, 4, true);
+        lc.setLed(0, 4, 4, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 4, 2, true);
+        lc.setLed(0, 4, 1, true);
+        lc.setLed(0, 4, 0, true);
+    }
+    else if(x % 10 == 5)
+    {
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 5, 3, true);
+        lc.setLed(0 ,6, 3, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 7, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 4, 1, true);
+        lc.setLed(0, 4, 2, true);
+        lc.setLed(0, 7, 7, true);
+    }
+    else if( x % 10 == 6)
+    {
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 5, 3, true);
+        lc.setLed(0, 6, 3, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 7, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 4, 1, true);
+        lc.setLed(0, 4, 2, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 4, 4, true);
+        lc.setLed(0, 4, 5, true);
+        lc.setLed(0, 4, 6, true);
+    }
+    else if( x % 10 == 7)
+    {
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 4, 1, true);
+    }
+    else if(x % 10 == 8)
+    {
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 5, 3, true);
+        lc.setLed(0, 6, 3, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 7, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 4, 1, true);
+        lc.setLed(0, 4, 2, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 4, 4, true);
+        lc.setLed(0, 4, 5, true);
+        lc.setLed(0, 4, 6, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+    }
+    else if( x % 10 == 9)
+    {
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 5, 0, true);
+        lc.setLed(0, 6, 0, true);
+        lc.setLed(0, 7, 0, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 5, 3, true);
+        lc.setLed(0, 6, 3, true);
+        lc.setLed(0, 7, 3, true);
+        lc.setLed(0, 4, 7, true);
+        lc.setLed(0, 5, 7, true);
+        lc.setLed(0, 6, 7, true);
+        lc.setLed(0, 7, 4, true);
+        lc.setLed(0, 7, 5, true);
+        lc.setLed(0, 7, 6, true);
+        lc.setLed(0, 4, 3, true);
+        lc.setLed(0, 4, 0, true);
+        lc.setLed(0, 4, 1, true);
+        lc.setLed(0, 4, 2, true);
+        lc.setLed(0, 7, 7, true);
+        lc.setLed(0, 7, 1, true);
+        lc.setLed(0, 7, 2, true);
+    }
+
+    if(x / 10 == 0)
+    {
+        lc.setLed(0, 0, 0, true);
+        lc.setLed(0, 0, 1, true);
+        lc.setLed(0, 0, 2, true);
+        lc.setLed(0, 0, 3, true);
+        lc.setLed(0, 0, 4, true);
+        lc.setLed(0, 0, 5, true);
+        lc.setLed(0, 0, 6, true);
+        lc.setLed(0, 0, 7, true);
+        lc.setLed(0, 2, 0, true);
+        lc.setLed(0, 2, 1, true);
+        lc.setLed(0, 2, 2, true);
+        lc.setLed(0, 2, 3, true);
+        lc.setLed(0, 2, 4, true);
+        lc.setLed(0, 2, 5, true);
+        lc.setLed(0, 2, 6, true);
+        lc.setLed(0, 2, 7, true);
+        lc.setLed(0, 1, 0, true);
+        lc.setLed(0, 1, 7, true);
+    }
+    else if( x / 10 == 1)
+    {
+        lc.setLed(0, 2, 0, true);
+        lc.setLed(0, 2, 1, true);
+        lc.setLed(0, 2, 2, true);
+        lc.setLed(0, 2, 3, true);
+        lc.setLed(0, 2, 4, true);
+        lc.setLed(0, 2, 5, true);
+        lc.setLed(0, 2, 6, true);
+        lc.setLed(0, 2, 7, true);
+        lc.setLed(0, 1, 1, true);
+        lc.setLed(0, 0, 2, true);
+    }
+    else if( x / 10 == 2)
+    {
+        lc.setLed(0, 0, 0, true);
+        lc.setLed(0, 1, 0, true);
+        lc.setLed(0, 2, 0, true);
+        lc.setLed(0, 0, 3, true);
+        lc.setLed(0, 1, 3, true);
+        lc.setLed(0, 2, 3, true);
+        lc.setLed(0, 0, 7, true);
+        lc.setLed(0, 1, 7, true);
+        lc.setLed(0, 2, 7, true);
+        lc.setLed(0, 2, 1, true);
+        lc.setLed(0, 2, 2, true);
+        lc.setLed(0, 0, 4, true);
+        lc.setLed(0, 0, 5, true);
+        lc.setLed(0, 0, 6, true);
+    }
+
+}
+
+void Print_Win()
+{
+    for(int i = 0; i < 8; i ++)
+        for(int j = 0; j < 8; j ++)
+            lc.setLed(0, i,  j, false);
+
+    lc.setLed(0, 3, 5, true);
+    lc.setLed(0, 4, 5, true);
+    lc.setLed(0, 3, 4, true);
+    lc.setLed(0, 4, 4, true);
+    lc.setLed(0, 2, 6, true);
+    lc.setLed(0, 5, 6, true);
+    lc.setLed(0, 1, 6, true);
+    lc.setLed(0, 6, 6, true);
+    lc.setLed(0, 6, 5, true);
+    lc.setLed(0, 1, 5, true);
+    lc.setLed(0, 0, 5, true);
+    lc.setLed(0, 7, 5, true);
+    lc.setLed(0, 0, 4, true);
+    lc.setLed(0, 7, 4, true);
+    lc.setLed(0, 0, 3, true);
+    lc.setLed(0, 7, 3, true);
+    lc.setLed(0, 0, 2, true);
+    lc.setLed(0, 7, 2, true);
+    lc.setLed(0, 0, 1, true);
+    lc.setLed(0, 7, 1, true);
+    lc.setLed(0, 0, 0, true);
+    lc.setLed(0, 7, 0, true);
+}
+
+void Print_Lose()
+{
+
+    lc.setLed(0, 1, 0, true);
+    lc.setLed(0, 1, 1, true);
+    lc.setLed(0, 1, 2, true);
+    lc.setLed(0, 1, 3, true);
+    lc.setLed(0, 1, 4, true);
+    lc.setLed(0, 1, 5, true);
+    lc.setLed(0, 1, 6, true);
+    lc.setLed(0, 1, 7, true);
+    lc.setLed(0, 2, 7, true);
+    lc.setLed(0, 3, 7, true);
+}
+
+void  Print_Level_1()
+{
+    lc.setLed(0, 0, 0, true);
+    lc.setLed(0, 0, 1, true);
+    lc.setLed(0, 0, 2, true);
+    lc.setLed(0, 0, 3, true);
+    lc.setLed(0, 0, 4, true);
+    lc.setLed(0, 0, 5, true);
+    lc.setLed(0, 0, 6, true);
+    lc.setLed(0, 0, 7, true);
+    lc.setLed(0, 2, 7, true);
+    lc.setLed(0, 1, 7, true);
+    lc.setLed(0, 7, 0, true);
+    lc.setLed(0, 7, 1, true);
+    lc.setLed(0, 7, 2, true);
+    lc.setLed(0, 7, 3, true);
+    lc.setLed(0, 7, 4, true);
+    lc.setLed(0, 7, 5, true);
+    lc.setLed(0, 7, 6, true);
+    lc.setLed(0, 7, 7, true);
+    lc.setLed(0, 6, 1, true);
+    lc.setLed(0, 5, 2, true);
+}
+
+void Print_Level_2()
+{
+    lc.setLed(0, 0, 0, true);
+    lc.setLed(0, 0, 1, true);
+    lc.setLed(0, 0, 2, true);
+    lc.setLed(0, 0, 3, true);
+    lc.setLed(0, 0, 4 ,true);
+    lc.setLed(0, 0, 5, true);
+    lc.setLed(0, 0, 6, true);
+    lc.setLed(0, 0, 7, true);
+    lc.setLed(0, 2, 7, true);
+    lc.setLed(0, 1, 7, true);
+    lc.setLed(0, 4, 0, true);
+    lc.setLed(0, 5, 0, true);
+    lc.setLed(0, 6, 0, true);
+    lc.setLed(0, 7, 0, true);
+    lc.setLed(0, 4, 3, true);
+    lc.setLed(0, 5, 3, true);
+    lc.setLed(0, 6, 3, true);
+    lc.setLed(0, 7, 3, true);
+    lc.setLed(0, 4, 7, true);
+    lc.setLed(0, 5, 7, true);
+    lc.setLed(0, 6, 7, true);
+    lc.setLed(0, 7, 7, true);
+    lc.setLed(0, 7, 0, true);
+    lc.setLed(0, 7, 1, true);
+    lc.setLed(0, 7, 2, true);
+    lc.setLed(0, 4, 5, true);
+    lc.setLed(0, 4, 4, true);
+    lc.setLed(0, 4, 6, true);
+}
+void Print_Level_3()
+{
+    lc.setLed(0, 0, 0, true);
+    lc.setLed(0, 0, 1, true);
+    lc.setLed(0, 0, 2, true);
+    lc.setLed(0, 0, 3, true);
+    lc.setLed(0, 0, 4, true);
+    lc.setLed(0, 0, 5, true);
+    lc.setLed(0, 0, 6, true);
+    lc.setLed(0, 0, 7, true);
+    lc.setLed(0, 2, 7, true);
+    lc.setLed(0, 1, 7, true);
+    lc.setLed(0, 7, 0, true);
+    lc.setLed(0, 7, 1, true);
+    lc.setLed(0, 7, 2, true);
+    lc.setLed(0, 7, 3, true);
+    lc.setLed(0, 7, 4, true);
+    lc.setLed(0, 7, 5, true);
+    lc.setLed(0, 7, 6, true);
+    lc.setLed(0, 7, 7, true);
+    lc.setLed(0, 6, 7, true);
+    lc.setLed(0, 5, 7, true);
+    lc.setLed(0, 6, 3, true);
+    lc.setLed(0, 5, 3, true);
+    lc.setLed(0, 6, 0, true);
+    lc.setLed(0, 5, 0, true);
+    lc.setLed(0, 4, 7, true);
+    lc.setLed( 0, 4, 0, true);
+}
+
+
+int Alive = 0,Level_1_finished = 0, Level_2_finished = 0, Level_3_finished = 0;
+int Row = 0 ,Col = 3;
+
+void loop()
+{
+    for(int i = 0; i < 8; i ++)
+        for( int j = 0; j < 8; j ++)
+        Matrix_3[i][j] = Matrix_2[i][j];
+    int Max = 0;
+    int Read_x, Read_y, Read_sw;
+    for(int i = 0; i < 8 ; i ++)
+        for( int j = 0; j < 8; j ++)
+            lc.setLed(0, i,  j, false);
+
+    while( Alive == 0)
+    {
+        Read_x = analogRead( X_pin);
+        if( Read_x > 600 ) Alive = 1;
+    }
+    if( Alive )
+    {
+        Print_Level_1();
+        delay(4000);
+    }
+    for( int i = 0; i < 8; i ++)
+        for( int j = 0; j < 8; j ++)
+            lc.setLed(0, i,  j, false);
+
+    Read_sw = digitalRead( SW_pin);
+
+    while( Alive == 1 && Level_1_finished == 0)  //LEVEL 1
+    {
+        for(int i=0; i < 8; i++)
+            for( int j = 0 ; j< 8; j ++)
+                if(Matrix_1[i][j]==2)lc.setLed(0, i,  j, true);
+
+        Read_x = analogRead( X_pin);
+        Read_y = analogRead( Y_pin);
+
+
+        int Max = 0;
+        if( Row == 7) Level_1_finished = 1;
+        int r = Row,c = Col;
+        lc.setLed(0, Row, Col, true);
+        if(Read_y < 400) Col --;
+        else if(Read_y > 600) Col ++;
+        else if(Read_x > 600)
+        {
+            Row ++;
+            if( Row > Max) Max = Row;
+        }
+
+        else if(Read_x < 400)Row --;
+        if(Row == -1) Row = 0;
+        if(Row == 8) Row = 7;
+        if(Col == 8) Col = 7;
+        if(Col == -1) Col = 0;
+        delay(100);
+        lc.setLed(0, r, c, false);
+        if(Score < Max) Score = Max ;
+        if( Matrix_1 [ Row][ Col] == 2)
+        {
+            Alive=0;
+            for( int i = 0; i < 8; i++)
+                for( int j = 0; j < 8; j++)
+                    lc.setLed(0, i, j, false);
+            Print_Lose();
+            delay(2000);
+            for( int i = 0; i < 8; i ++)
+                for(int j = 0; j < 8; j ++)
+                    lc.setLed(0, i,  j, false);
+        }
+        if( Level_1_finished == 1)
+        {
+
+            for( int i = 0; i < 8; i++)
+                for( int j = 0; j < 8; j++)
+                    lc.setLed(0, i, j, false);
+            Print_Win();
+            delay(2000);
+            for( int i = 0; i < 8; i ++)
+                for(int j = 0; j < 8; j ++)
+                    lc.setLed(0, i,  j, false);
+            Score = 7;
+        }
+
+
+    }
+
+    for( int i = 0; i < 8; i++)
+        for( int j = 0; j < 8; j++)
+            lc.setLed(0, i, j, false);
+    if(Level_1_finished == 1 && Alive)
+    {
+        Score = 7;
+        Print_Level_2();
+        delay(1000);
+    }
+
+
+      for( int i = 0; i < 8; i++)
+        for( int j = 0; j < 8; j++)
+            lc.setLed(0, i, j, false);
+    Row = 0;
+    Col = 3;
+    Max = 0;
+   if(Level_1_finished == 1)
+        while( Alive && Level_2_finished == 0)
+        {
+
+            Read_x = analogRead( X_pin);
+            Read_y = analogRead( Y_pin);
+
+            if(Row < 7)
+                for( int i = 1; i < 8 ; i++)
+                    for( int j = 0; j < 8; j ++)
+                        if(Matrix_2[i][j] == 2) lc.setLed(0, i , j, true);
+                        
+            int r = Row, c = Col;
+            lc.setLed(0, Row, Col, true);
+            if(Read_y < 400) Col --;
+            else if(Read_y > 600) Col ++;
+            else if(Read_x > 600)
+            {
+                Row ++;
+                if( Row > Max - 7) Max = Row ;
+            }
+            else if(Read_x < 400)Row --;
+            if(Row == -1) Row = 0;
+            if(Row == 8) Row = 7;
+            if(Col == 8) Col = 7;
+            if(Col == -1) Col = 0;
+            delay(100);
+            lc.setLed(0, r, c, false);
+            if(Score < Max + 7) Score= Max + 7;
+
+            if( Matrix_2 [ Row][ Col] == 2)
+            {
+                Alive = 0;
+                for( int i = 0; i < 8; i++)
+                    for( int j = 0; j < 8; j++)
+                        lc.setLed(0, i, j, false);
+                Print_Lose();
+                for( int i = 0; i < 8; i ++)
+                    for(int j = 0; j < 8; j ++)
+                        lc.setLed(0, i,  j, false);
+                Alive = 0;
+                delay(2000);
+            }
+            if(Row == 7 && Alive)
+            {
+                for( int i = 0; i < 8; i++)
+                    for( int j = 0; j < 8; j++)
+                        lc.setLed(0, i, j, false);
+                Print_Win();
+                delay(1500);
+                for( int i = 0; i < 8; i ++)
+                    for(int j = 0; j < 8; j ++)
+                        lc.setLed(0, i,  j, false);
+                Level_2_finished=1;
+
+            }
+        }
+    if(Alive)
+    {
+        Row = 0;
+        Col = 3;
+        int AuxRow = 0, AuxCol = 0;
+        for( int i = 0; i < 8; i ++)
+            for(int j = 0; j < 8; j ++)
+                lc.setLed(0, i,  j, false);
+        Max = 0;
+        if(Level_2_finished == 1)
+        {
+            Print_Level_3();
+            delay(900);
+            for(int i = 0; i < 8 ; i++)
+                for(int j = 0; j < 8; j ++)
+                    lc.setLed(0, i,  j, false);
+
+            while( Alive && Level_3_finished == 0)
+
+            {
+                lc.setLed(0, Row, Col, true);
+
+                for( int i = 1; i < 8; i ++)
+                    for (int j = 0; j < 8; j ++)
+                        if(Matrix_3[i][j] == 2)
+                            lc.setLed(0, i,  j, true);
+                int r = Row,c = Col;
+                int Read_x = analogRead(X_pin);
+                int Read_y = analogRead(Y_pin);
+                lc.setLed(0, Row, Col, true);
+                if(Read_y < 400)Col--;
+                else if(Read_y > 600)Col++;
+                else if(Read_x > 600)
+                {
+                    Row++;
+                    if( Max < Row) Max = Row;
+                }
+                else if(Read_x < 400)Row --;
+                if(Row == -1)Row = 0;
+                if(Row == 8)Row = 7;
+                if(Col == 8)Col = 7;
+                if(Col == -1)Col = 0;
+                delay(100);
+                lc.setLed(0, r, c, false);
+                delay(20);
+                lc.setLed(0, Row, Col, true);
+                if(Score < Max + 15) Score= Max + 15 ;
+
+                Matrix_3[ AuxRow][ AuxCol] = 2;
+                lc.setLed(0, AuxRow, AuxCol, true);
+                if(AuxCol == 7)
+                {
+                    AuxRow ++;
+                    AuxCol = 0;
+                    lc.setLed(0, AuxRow, AuxCol, true);
+                }
+                delay(398);
+                if((AuxCol == Col && Row == AuxRow)||Matrix_3[Row][Col] == 2)
+                {
+                    for( int i = 0; i < 8; i ++)
+                        for(int j = 0; j < 8; j ++)
+                            lc.setLed(0, i,  j, false);
+                    Print_Lose();
+                    delay(200);
+                    Row = 0;
+                    Col = 3;
+                    for( int i = 0; i < 8; i ++)
+                        for(int j = 0; j < 8; j ++)
+                            lc.setLed(0, i,  j, false);
+                    Alive = 0;
+                }
+
+                if( Row == 7)
+                {
+                    Level_3_finished= 1;
+                    Print_Win();
+                    delay(7000);
+                    for( int i = 0; i < 8; i ++)
+                        for(int j = 0; j < 8; j ++)
+                            lc.setLed(0, i,  j, false);
+                    Score = 21;
+                    Alive = 0;
+                }
+                AuxCol ++;
+
+            }
+        }
+
+    }
+    while( Alive == 0)
+    {
+        Print_Score( Score);
+        Read_x = analogRead( X_pin);
+        if( Read_x > 600 ) Alive = 1;
+        Col =  3;
+        Row= 0;
+        Level_1_finished = 0;
+        Level_2_finished = 0;
+        Level_3_finished = 0;
+    }
+
+
+}
